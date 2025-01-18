@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { corsConfig } from './config/cors.config';
 import { Logger } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,7 +18,18 @@ async function bootstrap() {
 
   app.enableCors(corsConfig);
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: false,
+    transformOptions: {
+      enableImplicitConversion: true,
+    },
+    exceptionFactory: (errors) => {
+      console.log('Validation errors:', JSON.stringify(errors, null, 2));
+      return new BadRequestException(errors);
+    },
+  }));
 
   const config = new DocumentBuilder()
     .setTitle('低代码平台 API')

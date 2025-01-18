@@ -6,6 +6,7 @@ import { RoleModule } from './modules/role/role.module';
 import { DataInitService } from './common/services/data-init.service';
 import { User } from './modules/user/entities/user.entity';
 import { Role } from './modules/role/entities/role.entity';
+import { PagesModule } from './modules/pages/pages.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { Role } from './modules/role/entities/role.entity';
     TypeOrmModule.forFeature([User, Role]),
     UserModule,
     RoleModule,
+    PagesModule,
   ],
   providers: [DataInitService],
 })

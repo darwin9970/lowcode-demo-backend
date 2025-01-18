@@ -1,18 +1,17 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PagesService } from './pages.service';
+import { PagesController } from './pages.controller';
+import { Page } from './entities/page.entity';
+import { PageVersion } from './entities/page-version.entity';
+import { User } from '../user/entities/user.entity'
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
-import { User } from './entities/user.entity';
-import { Role } from '../role/entities/role.entity';
 import { JwtStrategy } from '../../common/strategies/jwt.strategy';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Role]),
+    TypeOrmModule.forFeature([Page, PageVersion, User]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -22,8 +21,7 @@ import { JwtStrategy } from '../../common/strategies/jwt.strategy';
       inject: [ConfigService],
     }),
   ],
-  controllers: [UserController, AuthController],
-  providers: [UserService, AuthService, JwtStrategy],
-  exports: [UserService],
+  controllers: [PagesController],
+  providers: [PagesService, JwtStrategy],
 })
-export class UserModule {} 
+export class PagesModule {} 
