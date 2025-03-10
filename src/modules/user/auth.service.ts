@@ -19,7 +19,9 @@ export class AuthService {
       where: { username: loginDto.username },
       relations: ['roles'],
     });
-
+    // 获取12345678加密后的密码
+    console.log(await bcrypt.hash('12345678', 10));
+    // 比较密码
     if (!user || !(await bcrypt.compare(loginDto.password, user.password))) {
       throw new UnauthorizedException('用户名或密码错误');
     }
@@ -39,4 +41,4 @@ export class AuthService {
       },
     };
   }
-} 
+}
